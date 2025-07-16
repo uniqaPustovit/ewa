@@ -13,7 +13,7 @@ export async function POST(req) {
         //     euaContractUrl: process.env.NEXT_PUBLIC_EUA_CONTRACT_URL,
         // })
 
-        const { inputData } = await req.json()
+        const { inputData, inputDate } = await req.json()
 
         if (!inputData) {
             return new Response(JSON.stringify({ error: "Дані обов'язкові" }), {
@@ -105,6 +105,28 @@ export async function POST(req) {
         }
 
         const getTariff = async (data1) => {
+            let newData
+
+            if (inputDate && /^\d{4}-\d{2}-\d{2}$/.test(inputDate)) {
+                newData = {
+                    ...data1,
+                    customer: {
+                        ...data1.customer,
+                        birthDate: inputDate,
+                    },
+                }
+            } else if (inputDate && inputDate.length === 4) {
+                newData = {
+                    ...data1,
+                    insuranceObject: {
+                        ...data1.insuranceObject,
+                        year: inputDate,
+                    },
+                }
+            } else {
+                newData = data1
+            }
+
             let response2 = await fetch(
                 process.env.NEXT_PUBLIC_ISTUDIO_GETTARIFF_URL,
                 {
@@ -113,7 +135,7 @@ export async function POST(req) {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${await getToken()}`,
                     },
-                    body: JSON.stringify(data1),
+                    body: JSON.stringify(newData),
                 }
             )
             return response2.json()
@@ -158,7 +180,7 @@ export async function POST(req) {
                             const result = new Result({
                                 contractNumber,
                                 data: data2.ErrorMsg,
-                                environment: 'production'
+                                environment: "production",
                             })
                             await result.save()
                         } else {
@@ -167,7 +189,7 @@ export async function POST(req) {
                             const result = new Result({
                                 contractNumber,
                                 data: finalData,
-                                environment: 'production'
+                                environment: "production",
                             })
                             await result.save()
                         }
@@ -181,7 +203,7 @@ export async function POST(req) {
                     const result = new Result({
                         contractNumber,
                         data: error.message,
-                        environment: 'production'
+                        environment: "production",
                     })
                     await result.save()
                 }
