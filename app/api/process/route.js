@@ -126,7 +126,7 @@ export async function POST(req) {
             } else {
                 newData = data1
             }
-
+            // console.log(newData)
             let response2 = await fetch(
                 process.env.NEXT_PUBLIC_ISTUDIO_GETTARIFF_URL,
                 {
@@ -184,6 +184,7 @@ export async function POST(req) {
                             })
                             await result.save()
                         } else {
+                            // console.log(data1)
                             let finalData = await setContract(data1)
                             results.push({ contractNumber, data: finalData })
                             const result = new Result({
