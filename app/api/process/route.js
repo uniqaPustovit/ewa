@@ -116,6 +116,7 @@ export async function POST(req) {
                     },
                 }
             } else if (inputDate && inputDate.length === 4) {
+                console.log(inputDate)
                 newData = {
                     ...data1,
                     insuranceObject: {

@@ -10,6 +10,7 @@ export default function Kasco() {
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
     console.log(inputDate)
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -19,7 +20,7 @@ export default function Kasco() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ inputData }),
+                body: JSON.stringify({ inputData, inputDate }),
             })
             const data = await response.json()
             setResults(data)
@@ -62,7 +63,7 @@ export default function Kasco() {
                                 Введіть рік випуску ТЗ
                             </label>
                             <input
-                                id="inputData"
+                                id="inputDate"
                                 type="number"
                                 value={inputDate}
                                 onChange={(e) => setInputDate(e.target.value)}
